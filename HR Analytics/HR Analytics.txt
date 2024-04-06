@@ -1,0 +1,139 @@
+Hr Analytics Project
+Problem Statement:-
+1.	Working Preference of the Candidates either WFH or WFO and also how frequently taking wfh on Monday or Friday what could be the Major reason behind that percentage of people present per week or month etc. 
+Reason: if there is any team building Activity or team lunch we can plan it accordingly or if there is a new project needs some team members so it helps to select the team and have good capacity planning. 
+2.  Sick Leave Percentage and understanding the reason, for example, 10-15% of employees falling sick so that we can take the necessary precautions to make sure other employees are ok and helps company to take some special Precautions and measures so if you can find the number in specific month so that we can take necessary actions like giving medicines to prevent those medical emergencies.
+
+
+Skill’s Used 
+1.	Excel
+2.	Power Bi
+3.	Power Querry
+
+
+Data transformation and Gathering (Data Cleaning) 
+
+1.	Changing the Data adding all the date columns in single column to make a 1 column 
+
+2.	Duplicate this query and saved as template
+
+3.	Remove the Attendance Key and removing other columns except data sheet and filtered which column the remaining data should be saved, Delete the Change type in Right corner.
+
+4.	Go and select the table and right click and change it into use the first Row as hedder.
+
+5.	Remove the top rows and change the First and second columns to Employee code and Name.
+
+6.	Go to transform tab, select employee code and Name (to select multiple columns use ctrl + click) and go to unpivot the other than selected columns.
+
+7.	 There are some data other than date use the dropdown near the column and then unselect the data other than date / changing attribute type to date and go to the column and right click and remove errors.
+
+8.	Adding new parameters select date(data) column, go to Home, manage parameters, add new parameter fill the data go back to template.
+
+9.	Go to filter rows find the setting button right in the filter rows select change it to worksheet, go to the changes done file create a function and then use this “Get Data" ok and other sheets as well. 
+
+10.	Go to other Queries, select the data as add to column select invoke custom function, new column name as "Get Data" & function name as "Get Data", enter ok, there is some errors so go to template and delete "Changed type (multiple types)" you may get rid of errors.
+
+11.	Expand the get data and uncheck the original column name as prefix and press ok, delete columns like name, data, Kind , Hidden and rename( Items - sheet name , NAme.1 - Name) and change data types ( NAME - text , Employee Code - text ,Date - Date , Value - text, Sheet name - text)
+
+12.	Remove the template Before loading the data and renaming the Attendance sheet 2022-2023 to combined sheet/ final data and removing to load the data for Reference and add the Final data to load and then use close and apply.
+
+
+Creating matrices using DAX Function
+
+1. Go to home, yes create new table or parsing new content icon in the home tab to add the data and type Measures table, Click load.
+
+2. Right click measures table go click new measure and type "
+ Total Working days = 
+var total days = Count ('Final load'[Value]) 
+var nonworking days = Calculate (count ('final load'[Value]), 'Final load'[value] in {"WO","HO"})
+RETURN
+Total days – nonworking days "
+
+
+3. Then drag measures table to the graph canvas change the bar graph to card.
+
+4. go to the table add column as wfh Count 
+
+**Note to view in table format at left corner please find table grid. ** 
+
+Type: -
+ " WFH Count = Switch (True (),
+'Final load '[Value] ="WFH",1,
+'Final load '[Value] ="HWFH",0.5,
+0) "
+to validate go to value uncheck all and add Wfh and hwfh.
+
+5. add an new measure Wfh count 
+“wfh count= SUM ('Final load'[Wfh Count])”
+
+6. add a new measure Present Days
+Present Days: -
+“Var Present days = Calculate (count ('final load'[value]), 'Final load'[Value]="P")
+Return
+Present days + [Wfh Count]”
+
+7. Add an new measure Present %
+“Present % = DIVIDE ([Present Days],'Measure Table'[Total Working Days],0)*100”
+and use card to present values.
+
+8. Select date column and add it in values and select table column so that we can search the specific date .
+
+
+
+  
+9. add an new Column Month
+“ Month = STARTOFMONTH ('Final load'[Date])”
+change format to mmm yy
+
+10. select slicer/ new Slicer for radio buttons.
+adjust the sizes and shapes by format visual button.
+
+
+Dashboarding:
+1.	go to the table add column as SL Count 
+
+**Note to view in table format at left corner please find table grid **. 
+
+Type:-
+ " SL Count = Switch (True(),
+'Final load '[Value] ="SL",1,
+'Final load '[Value] ="Hsl",0.5,
+0) "
+
+
+2. add an new measure SL count in measuring table as "SL count= SUM ('Final load'[SL Count])"
+
+3. Create new measure in measuring table as "SL % = DIVIDE ([SL count], [Total Working days],0)"
+
+4. Copy wfh percent numbers graph and copy, select SL% and change it to Percentage from measure tools
+
+ **Note: The calculation done is the total percentage sick leaves taken by a candidate in a years**  
+ 
+5. Select Table add names, Present %, wfh % and SL% 
+
+6. Select home and add a text bot and type Presence insight & align it to centre and increase the font to 18
+
+7. copy the table and change it into matrix add rows as name and column as date and right click on date and select date and value select value as 1st value 
+ 
+8. go to the table select any name, we can find total information about that candidate. 
+
+9. Select date and Present % as table and it easy to change it into any table so i selected a area chart. 
+
+10 go to filters on all pages select value select all and de select "WO" and then select filters on this page select filter type as advance filtering and show items as is on or before (specific date) and apply filters, adding a trend line ,  Removing Y axis values from format your visuals add data labels and in lines change colours of the graph .
+
+11. repeat the above9 and 10 process 2 times for wfh % and SL % 
+
+12. “GO to final load add column by selecting column -> right click -> select new column -> Type -> Day OF Week = FORMAT ('Final load'[Date], "ddd"), then select day of week and Present % -> go to format your visual -> visual -> style to none “
+
+13. try the same to WFH% & SL % repat the 12th points again.
+
+Scoping Future requirements:
+
+1. Email Notifications 
+Publish the Dashboard to the Cloud then we can set a alert and for suppose if the candidate attendance is less than 75% then mail respective candidate, and the candidates list present today with Excel sheet as well .
+
+2. automatic data gathering: 
+ we can import multiple ways like sharing share point drive/ google sheet etc. by using get data and clicking more and find the ways to get the data. if the share point or google sheet is updated the values automatically updated. 
+
+3. data Access (Manager level and Employee level) :
+ first publish the dashboard so that the data set is created and then create the dashboard with that data set for the Employee level .
